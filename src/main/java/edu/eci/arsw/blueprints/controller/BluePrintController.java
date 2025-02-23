@@ -73,7 +73,7 @@ public class BluePrintController {
             bps.addNewBlueprint(bp);
             response.put("status", "success");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        } catch (BlueprintPersistenceException e) {
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
@@ -86,5 +86,23 @@ public class BluePrintController {
     @GetMapping
     public Set<Blueprint> getAllBlueprints(){
         return bps.getAllBlueprints();
+    }
+
+    /**
+     * Actualiza un blueprint existente.
+     * @param author Nombre del autor.
+     * @param name Nombre del blueprint.
+     * @param blueprint Blueprint actualizado.
+     * @return ResponseEntity con el blueprint actualizado o un error si no se encuentra.
+     */
+    @PutMapping("/{author}/{name}")
+    public ResponseEntity<?> updateBlueprint(@PathVariable("author") String author, @PathVariable("name") String name, @RequestBody Blueprint blueprint) {
+        try {
+            return ResponseEntity.ok(bps.updateBlueprint(author, name, blueprint));
+        } catch (BlueprintNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Blueprint not found: " + author + "/" + name);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+        }
     }
 }

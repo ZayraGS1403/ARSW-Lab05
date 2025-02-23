@@ -25,13 +25,8 @@ public class BlueprintsServices {
      * @param bp El blueprint a agregar.
      * @throws UnsupportedOperationException si el blueprint ya existe.
      */
-    public void addNewBlueprint(Blueprint bp){
-        try{
-            bpp.saveBlueprint(bp);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            throw new UnsupportedOperationException("User already exists!");
-        }
+    public void addNewBlueprint(Blueprint bp) throws BlueprintPersistenceException{
+        bpp.saveBlueprint(bp);
     }
 
     /**
@@ -61,6 +56,18 @@ public class BlueprintsServices {
      */
     public Set<Blueprint> getBlueprintsByAuthor(String author) throws BlueprintNotFoundException{
         return filter.filterBlueprints(bpp.getBlueprintsByAuthor(author));
+    }
+
+    /**
+     * Actualiza un blueprint existente.
+     * @param author Autor del blueprint.
+     * @param name Nombre del blueprint.
+     * @param blueprint El nuevo blueprint.
+     * @return El blueprint actualizado.
+     * @throws BlueprintNotFoundException si no se encuentra el blueprint.
+     */
+    public Blueprint updateBlueprint(String author, String name, Blueprint blueprint) throws BlueprintNotFoundException {
+        return filter.filterPlain(bpp.updateBlueprint(author, name, blueprint));
     }
 
 }

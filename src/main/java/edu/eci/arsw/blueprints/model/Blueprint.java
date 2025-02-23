@@ -54,6 +54,14 @@ public class Blueprint {
         return hash;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

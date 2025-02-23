@@ -4,6 +4,7 @@ import edu.eci.arsw.blueprints.model.*;
 import edu.eci.arsw.blueprints.persistence.*;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Implementación en memoria de la persistencia de planos.
@@ -12,13 +13,23 @@ import java.util.*;
 @Service
 public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
 
-    private final Map<Tuple<String,String>,Blueprint> blueprints=new HashMap<>();
+    private final Map<Tuple<String,String>,Blueprint> blueprints=new ConcurrentHashMap<>();
 
     public InMemoryBlueprintPersistence() {
-        //load stub data
-        Point[] pts=new Point[]{new Point(140, 140),new Point(115, 115)};
-        Blueprint bp=new Blueprint("_authorname_", "_bpname_ ",pts);
-        blueprints.put(new Tuple<>(bp.getAuthor(),bp.getName()), bp);
+        //load one BluePrint
+        Point[] pts1=new Point[]{new Point(140, 140),new Point(115, 115), new Point(115, 115)};
+        Blueprint bp1=new Blueprint("Juan", "EdificioA",pts1);
+        blueprints.put(new Tuple<>(bp1.getAuthor(),bp1.getName()), bp1);
+
+        //Load another BluePrint
+        Point[] pts2=new Point[]{new Point(10, 24),new Point(10, 24), new Point(100, 100)};
+        Blueprint bp2=new Blueprint("Juan", "EdificioB",pts2);
+        blueprints.put(new Tuple<>(bp2.getAuthor(),bp2.getName()), bp2);
+
+        //Load another BluePrint
+        Point[] pts3=new Point[]{new Point(70, 248),new Point(110, 240), new Point(100, 100), new Point(100, 100)};
+        Blueprint bp3=new Blueprint("Marcos", "EdificioC",pts3);
+        blueprints.put(new Tuple<>(bp3.getAuthor(),bp3.getName()), bp3);
         
     }
 
@@ -33,10 +44,8 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
         String nameTrimmed = bp.getName().trim();
         Tuple<String, String> key = new Tuple<>(authorTrimmed, nameTrimmed);
 
-        if (blueprints.containsKey(key)) {
+        if (blueprints.putIfAbsent(key, bp) != null) {
             throw new BlueprintPersistenceException("The given blueprint already exists: " + bp);
-        } else {
-            blueprints.put(key, bp);
         }
     }
 
@@ -95,5 +104,27 @@ public class InMemoryBlueprintPersistence implements BlueprintsPersistence{
 
         return blueprintSet;
     }
-    
+
+
+    /**
+     * Actualiza un blueprint en memoria.
+     * @param author Nombre del autor.
+     * @param name Nombre del blueprint.
+     * @param blueprint El nuevo a actualizar.
+     * @return El blueprint actualizado.
+     * @throws BlueprintNotFoundException si no se encuentra el blueprint.
+     */
+    @Override
+    public Blueprint updateBlueprint(String author, String name, Blueprint blueprint) throws BlueprintNotFoundException {
+        String authorTrimmed = author.trim();
+        String nameTrimmed = name.trim();
+        Tuple<String, String> key = new Tuple<>(authorTrimmed, nameTrimmed);
+
+        blueprint.setAuthor(authorTrimmed);
+        blueprint.setName(nameTrimmed);
+        if (blueprints.replace(key, blueprint) == null) {
+            throw new BlueprintNotFoundException("Blueprint not found: " + author + " - " + name);
+        }
+        return blueprint;
+    }
 }
