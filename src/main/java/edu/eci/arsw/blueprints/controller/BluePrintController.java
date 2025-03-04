@@ -2,11 +2,15 @@ package edu.eci.arsw.blueprints.controller;
 
 import edu.eci.arsw.blueprints.model.*;
 import edu.eci.arsw.blueprints.persistence.*;
+import edu.eci.arsw.blueprints.services.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
-import edu.eci.arsw.blueprints.services.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 /**
@@ -14,6 +18,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping( "/blueprints")
+@Tag(name = "Blueprints", description = "API para gestionar blueprints")
 public class BluePrintController {
 
     @Autowired
@@ -34,6 +39,7 @@ public class BluePrintController {
      * @return ResponseEntity con el blueprint solicitado o un error si no se encuentra.
      */
     @GetMapping("/{author}/{name}")
+    @Operation(summary = "Obtener un blueprint por autor y nombre", description = "Devuelve un blueprint basado en su autor y nombre.")
     public ResponseEntity<?> getBlueprint(@PathVariable("author") String author, @PathVariable("name") String name) {
         try {
             return ResponseEntity.ok(bps.getBlueprint(author, name));
@@ -50,6 +56,7 @@ public class BluePrintController {
      * @return ResponseEntity con el conjunto de blueprints o un error si no se encuentran.
      */
     @GetMapping("/{author}")
+    @Operation(summary = "Obtener todos los blueprints de un autor", description = "Devuelve una lista de blueprints pertenecientes a un autor específico.")
     public ResponseEntity<?> getBlueprintByAuthor(@PathVariable("author") String author) {
         try {
             Set<Blueprint> blueprints = bps.getBlueprintsByAuthor(author);
@@ -67,6 +74,7 @@ public class BluePrintController {
      * @return ResponseEntity con el estado de la operación.
      */
     @PostMapping
+    @Operation(summary = "Registrar un nuevo blueprint", description = "Añade un nuevo blueprint al sistema.")
     public ResponseEntity<?> registerBlueprint(@RequestBody Blueprint bp){
         HashMap<String, Object> response = new HashMap<>();
         try {
@@ -84,6 +92,7 @@ public class BluePrintController {
      * @return Conjunto de blueprints.
      */
     @GetMapping
+    @Operation(summary = "Obtener todos los blueprints", description = "Devuelve una lista de todos los blueprints registrados en el sistema.")
     public Set<Blueprint> getAllBlueprints(){
         return bps.getAllBlueprints();
     }
@@ -96,6 +105,7 @@ public class BluePrintController {
      * @return ResponseEntity con el blueprint actualizado o un error si no se encuentra.
      */
     @PutMapping("/{author}/{name}")
+    @Operation(summary = "Actualizar un blueprint", description = "Modifica los datos de un blueprint existente.")
     public ResponseEntity<?> updateBlueprint(@PathVariable("author") String author, @PathVariable("name") String name, @RequestBody Blueprint blueprint) {
         try {
             return ResponseEntity.ok(bps.updateBlueprint(author, name, blueprint));

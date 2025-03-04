@@ -88,6 +88,6 @@ public class InMemoryPersistenceTest {
         Set<Blueprint> allBlueprints = persistence.getAllBluePrints();
         assertTrue(allBlueprints.contains(bp1));
         assertTrue(allBlueprints.contains(bp2));
-        assertEquals(3, allBlueprints.size());
+        assertEquals(5, allBlueprints.size());
     }
 }
