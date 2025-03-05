@@ -1,9 +1,10 @@
 {
 	"info": {
 		"_postman_id": "50b028ae-9be6-4563-aebd-59808b97f611",
-		"name": "Lab04-ARSW-filter-Redundancy",
+		"name": "Lab05-ARSW",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38494414"
+		"_exporter_id": "38494414",
+		"_collection_link": "https://picada-7469.postman.co/workspace/picada-Workspace~b42aeac4-1a6b-4567-8bcf-b3cf411eb1a2/collection/38494414-50b028ae-9be6-4563-aebd-59808b97f611?action=share&source=collection_link&creator=38494414"
 	},
 	"item": [
 		{
@@ -89,6 +90,39 @@
 					"path": [
 						"blueprints",
 						"Pepe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/blueprints/Marcos/EdificioC",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"author\": \"Marcos\",\r\n        \"points\": [\r\n            {\r\n                \"x\": 120,\r\n                \"y\": 748\r\n            },\r\n            {\r\n                \"x\": 70,\r\n                \"y\": 248\r\n            },\r\n            {\r\n                \"x\": 1000,\r\n                \"y\": 1000\r\n            },\r\n            {\r\n                \"x\": 70,\r\n                \"y\": 248\r\n            }\r\n        ],\r\n        \"name\": \"EdificioYY\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/blueprints/Marcos/EdificioC",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"blueprints",
+						"Marcos",
+						"EdificioC"
 					]
 				}
 			},
